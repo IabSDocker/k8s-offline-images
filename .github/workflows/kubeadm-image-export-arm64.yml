@@ -23,7 +23,8 @@ jobs:
 
       - name: Extract version from tag
         id: version
-        run: echo "K8S_VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        # run: echo "K8S_VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        run: echo "K8S_VERSION=$(cat VERSION)" >> $GITHUB_ENV
 
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
@@ -52,7 +53,7 @@ jobs:
             echo "❌ kubeadm version ${K8S_VERSION_NUM} not found!"
             exit 1
           fi
-          sudo apt-get install -y kubeadm=$DEB_KUBEADM_VERSION kubelet=$DEB_KUBEADM_VERSION kubectl=$DEB_KUBEADM_VERSION--allow-unauthenticated
+          sudo apt-get install -y kubeadm=$DEB_KUBEADM_VERSION kubelet=$DEB_KUBEADM_VERSION kubectl=$DEB_KUBEADM_VERSION --allow-unauthenticated --allow-downgrades
 
       - name: Save images to tarball
         run: |
